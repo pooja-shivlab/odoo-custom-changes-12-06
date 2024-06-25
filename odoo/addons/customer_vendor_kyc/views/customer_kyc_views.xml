@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit the existing contact form view -->
+        <record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <div name="buttons" class="oe_button_box" groups="base.group_user" style="display: flex; align-items: center;  justify-content: space-between;">
+                        <button name="send_form_action" type="object" string="Send Form" class="btn-primary"
+                                id="send_form_button" style="margin-right: 20px;"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,publish"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

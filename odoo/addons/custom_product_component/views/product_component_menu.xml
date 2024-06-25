@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Define the action for the Product Component list view -->
+    <record id="action_product_component" model="ir.actions.act_window">
+        <field name="name">Product Component</field>
+        <field name="res_model">product.component</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Define the menu item under the "Products" section of Inventory -->
+    <menuitem id="menu_product_component"
+              name="Product Component"
+              parent="stock.menu_stock_inventory_control"
+              action="action_product_component"
+              sequence="30"/>
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+    <template id="customer_form_template" name="Customer Form">
+        <form method="post" action="/customer/form/submit">
+            <input type="hidden" name="form_id" value="{{ form.id }}"/>
+            <label for="preferred_email">Preferred Email Address:</label>
+            <input type="text" id="preferred_email" name="preferred_email"/>
+            <button type="submit">Submit</button>
+        </form>
+    </template>
+</odoo>

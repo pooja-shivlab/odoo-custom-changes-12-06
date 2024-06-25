@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Define the tree view for Chemical Component -->
+    <record id="view_chemical_component_tree" model="ir.ui.view">
+        <field name="name">chemical.component.tree</field>
+        <field name="model">chemical.component</field>
+        <field name="arch" type="xml">
+            <tree string="Chemical Components">
+                <field name="component_id"/>
+                <field name="value_type"/>
+                <field name="min_value"/>
+                <field name="max_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Define the form view for Chemical Component -->
+    <record id="view_chemical_component_form" model="ir.ui.view">
+        <field name="name">chemical.component.form</field>
+        <field name="model">chemical.component</field>
+        <field name="arch" type="xml">
+            <form string="Chemical Component">
+                <sheet>
+                    <group>
+                        <field name="component_id"/>
+                        <field name="value_type"/>
+                        <field name="min_value"/>
+                        <field name="max_value"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Define the action for the Chemical Component list view -->
+    <record id="action_chemical_component" model="ir.actions.act_window">
+        <field name="name">Chemical Component</field>
+        <field name="res_model">chemical.component</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Define the menu item under the "Products" section of Inventory -->
+    <menuitem id="menu_chemical_component"
+              name="Chemical Component"
+              parent="stock.menu_stock_inventory_control"
+              action="action_chemical_component"
+              sequence="31"/>
+</odoo>
