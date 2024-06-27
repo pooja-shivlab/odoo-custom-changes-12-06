@@ -1,0 +1,80 @@
+/* Basic styles for dropdowns */
+.notification-icon {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-weight: 400;
+    top: 11px;
+    right: 2px;
+}
+
+.dropdown-toggle-button {
+    cursor: pointer;
+}
+
+/* Hide the default dropdown arrow */
+.dropdown-toggle-button::after {
+    display: none;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-dropdown.show {
+    display: block;
+    position:absolute;
+    top:35px;
+    right:0px;
+    width:200px;
+
+    li:not(:last-child){
+        border-bottom:1px solid lightgray;
+    }
+
+
+}
+
+.soft-warning-menu{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:5px;
+    width: 100%;
+    i{
+
+    color:#d4420d
+    }
+        a{
+            color:#d4420d;
+            font-size:15px;
+        }
+}
+.hard-warning-menu{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:5px;
+    width: 100%;
+        i{
+            color:#8a0707fc !important
+        }
+        a{
+            color:#8a0707fc;
+            font-size:15px;
+        }
+}
+
+.dropdown-new-item {
+padding:0;
+width:auto;
+}

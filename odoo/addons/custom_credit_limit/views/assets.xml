@@ -1,0 +1,8 @@
+<odoo>
+    <template id="assets_backend_custom" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/custom_credit_limit/static/src/js/notification_icon.js"></script>
+            <link rel="stylesheet" href="/custom_credit_limit/static/src/css/notification_icon.css"/>
+        </xpath>
+    </template>
+</odoo>
