@@ -1,7 +1,8 @@
 /* @odoo-module */
 
-import { Component, useState } from "@odoo/owl";
+import { Component, useState, useExternalListener } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { useDiscussSystray } from "@mail/utils/common/hooks";
 
 export class CustomNotificationIcon extends Component {
     static template = "custom_credit_limit.assets";
@@ -11,10 +12,17 @@ export class CustomNotificationIcon extends Component {
             isOpen: false,
         });
 
+        useExternalListener(window, "click", this.handleExternalClick, { capture: true });
+
         // Toggle dropdown visibility
         this.toggleDropdown = () => {
             this.state.isOpen = !this.state.isOpen;
         };
+    }
+
+    // Dropdown close while clicking on any other thing is page
+    handleExternalClick(event) {
+        Object.assign(this.state, { isOpen: false });
     }
 }
 
