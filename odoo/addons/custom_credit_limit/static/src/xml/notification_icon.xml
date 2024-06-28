@@ -5,11 +5,11 @@
             <ul class="menu-dropdown" t-att-class="{'show': state.isOpen}">
                 <li class="soft-warning-menu">
                     <i class="fa fa-handshake-o py-2 orange" aria-hidden="true"></i>
-                    <a href="#" class="dropdown-new-item soft-warning">Soft Warning 0</a>
+                    <a t-attf-href="/partner_overview" class="dropdown-new-item soft-warning">Soft Warning 0</a>
                 </li>
                 <li class="hard-warning-menu">
                     <i class="fa fa-handshake-o py-2 red" aria-hidden="true"></i>
-                    <a href="#" class="dropdown-new-item hard-warning">Hard Warning 0</a>
+                    <a t-attf-href="/partner_overview" class="dropdown-new-item hard-warning">Hard Warning 0</a>
                 </li>
             </ul>
         </div>

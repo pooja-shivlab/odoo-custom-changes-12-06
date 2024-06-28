@@ -2,12 +2,16 @@
     'name': 'Custom Credit Limit',
     'version': '1.0',
     'summary': 'Manage to show notifications',
-    'depends': ['base', 'web'],
+    'depends': ['base', 'web', 'sale', 'account'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/partner_overview.xml',
+    ],
     'assets': {
-            'web.assets_backend': [
-                'custom_credit_limit/static/src/**/*',
-            ],
-     },
+        'web.assets_backend': [
+            'custom_credit_limit/static/src/**/*',
+        ],
+    },
     'installable': True,
     'auto_install': False,
     'application': True,

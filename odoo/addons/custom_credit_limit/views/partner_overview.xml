@@ -1,0 +1,12 @@
+<!-- partner_overview.xml -->
+<odoo>
+    <data>
+        <template id="partner_overview" name="Partner Overview">
+            <div>
+                <h1>Partner Overview</h1>
+                <!-- Other content here -->
+                <button class="btn btn-primary" onclick="window.print()">Print</button>
+            </div>
+        </template>
+    </data>
+</odoo>
