@@ -1,0 +1,20 @@
+<!-- partner_view.xml -->
+<odoo>
+    <data>
+        <record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='misc']" position="before">
+                        <group name="credit_limit" string="Credit Limit">
+                            <field name="customer_credit_limit"/>
+                            <field name="blocking_limit"/>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>
