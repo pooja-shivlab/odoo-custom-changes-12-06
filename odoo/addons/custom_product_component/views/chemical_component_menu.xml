@@ -39,10 +39,17 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <!-- Define the menu item under the "Products" section of Inventory -->
+    <!-- Define the chemical menu under the "Products" section of Inventory -->
     <menuitem id="menu_chemical_component"
               name="Chemical Component"
               parent="stock.menu_stock_inventory_control"
               action="action_chemical_component"
               sequence="31"/>
+
+    <!-- Define the chemical menu under the "Products" section of Sales -->
+    <menuitem id="sales_menu_chemical_component"
+              name="Chemical Component"
+              parent="sale.product_menu_catalog"
+              action="action_chemical_component"
+              sequence="50"/>
 </odoo>

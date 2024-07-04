@@ -1,0 +1,14 @@
+.o_button_toggle_default,
+.o_button_remove_toggle_default {
+    font-size: 18px;
+}
+
+
+.o_button_toggle_default .fa-star-o {
+    color: grey; /* Default star color */
+}
+
+
+ .o_button_remove_toggle_default .fa-star {
+                color: #FFD700; /* Yellow color */
+            }

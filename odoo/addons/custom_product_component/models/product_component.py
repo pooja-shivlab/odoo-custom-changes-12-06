@@ -1,12 +1,21 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class ProductComponent(models.Model):
     _name = 'product.component'
     _description = 'Product Component'
 
-    name = fields.Char(string='Component Name', required=True)
+    name = fields.Char(string='Name', required=True)
     short_name = fields.Char(string='Short Name')
+    is_default = fields.Boolean(default=False, string='Default')
+
+    def toggle_default(self, *args):
+        for record in self:
+            record.is_default = True
+
+    def remove_toggle_default(self, *args):
+        for record in self:
+            record.is_default = False
 
 
 class ChemicalComponent(models.Model):
@@ -23,3 +32,4 @@ class ChemicalComponent(models.Model):
     min_value = fields.Float(string='Min Value (in %)')
     max_value = fields.Float(string='Max/Fixed Value (in %)')
     price = fields.Float(string='Price')
+    is_default = fields.Boolean(default=False, string='Default')

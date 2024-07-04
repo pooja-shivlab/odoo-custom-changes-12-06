@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Define the tree view for Product Component -->
+    <record id="view_product_component_tree" model="ir.ui.view">
+        <field name="name">product.component.tree</field>
+        <field name="model">product.component</field>
+        <field name="arch" type="xml">
+            <tree string="Product Components">
+                <field name="is_default" widget="boolean_favorite" invisible="1" nolabel="1"/>
+                <button name="toggle_default"
+                        type="object"
+                        icon="fa-star-o"
+                        class="o_button_toggle_default"
+                        invisible="is_default"
+                        title="Add to Default"
+                />
+
+                <button name="remove_toggle_default"
+                        type="object"
+                        icon="fa-star"
+                        class="o_button_remove_toggle_default"
+                        invisible="not is_default"
+                        title="Remove Default"
+                />
+                <field name="name"/>
+                <field name="short_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Define the form view for Product Component -->
+    <record id="view_product_component_form" model="ir.ui.view">
+        <field name="name">product.component.form</field>
+        <field name="model">product.component</field>
+        <field name="arch" type="xml">
+            <form string="Product Component">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="short_name"/>
+                        <field name="is_default"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <!-- Define the action for the Product Component list view -->
     <record id="action_product_component" model="ir.actions.act_window">
@@ -8,10 +52,17 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <!-- Define the menu item under the "Products" section of Inventory -->
+    <!-- Define the product component menu under the "Products" section of Inventory -->
     <menuitem id="menu_product_component"
               name="Product Component"
               parent="stock.menu_stock_inventory_control"
               action="action_product_component"
               sequence="30"/>
+
+    <!-- Define the product component menu under the "Products" section of Sales -->
+    <menuitem id="sales_menu_product_component"
+              name="Product Component"
+              parent="sale.product_menu_catalog"
+              action="action_product_component"
+              sequence="40"/>
 </odoo>
