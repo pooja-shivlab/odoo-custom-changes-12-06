@@ -320,6 +320,37 @@ class SaleOrderLine(models.Model):
             if lang != self.env.lang:
                 line = line.with_context(lang=lang)
             name = line._get_sale_order_line_multiline_description_sale()
+
+            # Append components to the description
+            components = line.product_id.product_tmpl_id.component_ids
+            if components:
+                component_lines = []
+                for comp in components:
+                    component_name = comp.product_component_id.short_name
+                    value_type = comp.value_type
+                    if value_type == 'value_range':
+                        min_value = comp.min_value or 0.0
+                        max_value = comp.max_value or 0.0
+                        component_line = "{}: {}-{}".format(component_name, min_value, max_value)
+                    elif value_type == 'fix_value':
+                        min_value = comp.min_value
+                        max_value = comp.max_value
+                        if min_value is not None and max_value is not None:
+                            component_line = "{}: {}-{}".format(component_name, min_value, max_value)
+                        elif min_value is not None:
+                            component_line = "{}: {}".format(component_name, min_value)
+                        elif max_value is not None:
+                            component_line = "{}: {}".format(component_name, max_value)
+                        else:
+                            component_line = component_name
+                    else:
+                        component_line = component_name
+
+                    component_lines.append(component_line)
+
+                component_list = '\n'.join(component_lines)
+                name += '\nComponents:\n{}'.format(component_list)
+
             if line.is_downpayment and not line.display_type:
                 context = {'lang': lang}
                 dp_state = line._get_downpayment_state()
