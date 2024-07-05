@@ -2,11 +2,12 @@
     'name': 'Custom Credit Limit',
     'version': '1.0',
     'summary': 'Manage to show notifications',
-    'depends': ['base', 'web', 'sale', 'account'],
+    'depends': ['base', 'web', 'sale', 'account', 'custom_sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/partner_overview.xml',
         'views/res_partner_credit_limit_views.xml',
+        'views/sale_order_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
