@@ -34,7 +34,7 @@
         <field name="arch" type="xml">
             <xpath expr="//form//field[@name='order_line']//tree/field[@name='product_template_id']" position="after">
                 <button name="open_product_components_action" type="object" icon="fa-pencil"
-                        title="Edit Configuration"/>
+                        title="Edit Configuration" invisible="state not in ('draft', 'sent')"/>
             </xpath>
         </field>
     </record>

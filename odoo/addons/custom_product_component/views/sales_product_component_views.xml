@@ -16,6 +16,15 @@
                                 <field name="max_value"/>
                             </tree>
                         </field>
+                        <field name="chemical_component_ids" widget="one2many_list" string="">
+                            <tree editable="bottom">
+                                <field name="product_component_id"/>
+                                <field name="value_type"/>
+                                <field name="min_value"/>
+                                <field name="max_value"/>
+                                <field name="price"/>
+                            </tree>
+                        </field>
                     </group>
                     <footer>
                         <button name="save_changes" string="Save" type="object" class="btn-primary"/>

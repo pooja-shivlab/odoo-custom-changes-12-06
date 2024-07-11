@@ -44,6 +44,7 @@ class SaleOrderLineComponentRel(models.Model):
     _description = 'Sales Order Line Component Relation'
 
     component_ids = fields.One2many('product.component.rel', 'component_ids', string='Components')
+    chemical_component_ids = fields.One2many('chemical.component.rel', 'component_ids', string='Chemical Components')
     product_template_id = fields.Many2one('product.template', string='Product Template', required=True)
     sale_order_line_id = fields.Many2one('sale.order.line', string='Sale Order Line', required=True)
 
@@ -64,6 +65,7 @@ class SaleOrderLineComponentRel(models.Model):
 
             if existing_components:
                 component_defaults = []
+                chemical_component_defaults = []
                 for rel in existing_components.component_ids:
                     component_defaults.append((0, 0, {
                         'product_component_id': rel.product_component_id.id,
@@ -71,10 +73,20 @@ class SaleOrderLineComponentRel(models.Model):
                         'min_value': rel.min_value,
                         'max_value': rel.max_value,
                     }))
+                for rel in existing_components.chemical_component_ids:
+                    chemical_component_defaults.append((0, 0, {
+                        'product_component_id': rel.product_component_id.id,
+                        'value_type': rel.value_type,
+                        'min_value': rel.min_value,
+                        'max_value': rel.max_value,
+                        'price': rel.price,
+                    }))
                 defaults['component_ids'] = component_defaults
+                defaults['chemical_component_ids'] = chemical_component_defaults
             else:
                 # Load default components from the product template
                 component_defaults = []
+                chemical_component_defaults = []
                 product_template = self.env['product.template'].browse(product_template_id)
                 for rel in product_template.component_ids:
                     component_defaults.append((0, 0, {
@@ -83,7 +95,16 @@ class SaleOrderLineComponentRel(models.Model):
                         'min_value': rel.min_value,
                         'max_value': rel.max_value,
                     }))
+                for rel in product_template.chemical_component_ids:
+                    chemical_component_defaults.append((0, 0, {
+                        'product_component_id': rel.product_component_id.id,
+                        'value_type': rel.value_type,
+                        'min_value': rel.min_value,
+                        'max_value': rel.max_value,
+                        'price': rel.price,
+                    }))
                 defaults['component_ids'] = component_defaults
+                defaults['chemical_component_ids'] = chemical_component_defaults
 
         return defaults
 
@@ -105,6 +126,24 @@ class SaleOrderLineComponentRel(models.Model):
             else:
                 self.env['product.component.rel'].create(vals)
 
+        for component in self.chemical_component_ids:
+            vals = {
+                'component_ids': self.id,
+                'product_component_id': component.product_component_id.id,
+                'value_type': component.value_type,
+                'min_value': component.min_value,
+                'max_value': component.max_value,
+                'price': component.price,
+            }
+            existing_component = self.env['chemical.component.rel'].search([
+                ('component_ids', '=', self.id),
+                ('product_component_id', '=', component.product_component_id.id),
+            ])
+            if existing_component:
+                existing_component.write(vals)
+            else:
+                self.env['chemical.component.rel'].create(vals)
+
 
 class ProductComponentRel(models.Model):
     _name = 'product.component.rel'
@@ -119,3 +158,19 @@ class ProductComponentRel(models.Model):
         string='Component Value', required=True, default='value_range')
     min_value = fields.Float(string='Min Value (in %)', digits=(12, 3))
     max_value = fields.Float(string='Max / Fixed Value (in %)', digits=(12, 3))
+
+
+class SaleOrderLineChemicalComponentRel(models.Model):
+    _name = 'chemical.component.rel'
+    _description = 'Chemical Component Relation'
+
+    component_ids = fields.Many2one('sale.order.line.component.rel', string='Components', required=True,
+                                    ondelete='cascade')
+    product_component_id = fields.Many2one('chemical.component', string='Chemical Component', required=True)
+    value_type = fields.Selection([
+        ('value_range', 'Value Range'),
+        ('fix_value', 'Fix Value')],
+        string='Component Value', required=True, default='value_range')
+    min_value = fields.Float(string='Min Value (in %)', digits=(12, 3))
+    max_value = fields.Float(string='Max / Fixed Value (in %)', digits=(12, 3))
+    price = fields.Float(string='Price')
