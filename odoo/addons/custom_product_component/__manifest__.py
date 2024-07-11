@@ -10,6 +10,8 @@
         'views/chemical_component_menu.xml',
         'views/product_component_menu.xml',
         'views/product_template_view.xml',
+        'views/sales_order_component_popup.xml',
+        'views/sales_product_component_views.xml',
     ],
     'assets': {
         'web.assets_backend': [

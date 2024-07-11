@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record id="view_add_sale_order_line_component_rel_form" model="ir.ui.view">
+            <field name="name">add.sale.order.line.component.rel.form</field>
+            <field name="model">sale.order.line.component.rel</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="product_template_id" invisible="1"/>
+                        <field name="sale_order_line_id" invisible="1"/>
+                        <field name="component_ids" widget="one2many_list" string="">
+                            <tree editable="bottom">
+                                <field name="product_component_id"/>
+                                <field name="value_type"/>
+                                <field name="min_value"/>
+                                <field name="max_value"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="save_changes" string="Save" type="object" class="btn-primary"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
