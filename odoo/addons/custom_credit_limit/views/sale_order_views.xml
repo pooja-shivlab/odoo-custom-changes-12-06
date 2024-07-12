@@ -11,4 +11,17 @@
             </xpath>
         </field>
     </record>
+    <record id="sale_order_view_form_inherit_4" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.4</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="after">
+                <div class="alert alert-info" role="alert" style="font-size: 16px; padding: 10px;"
+                     invisible="customer_due_amount == ''">
+                    <field name="customer_due_amount"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
 </odoo>
