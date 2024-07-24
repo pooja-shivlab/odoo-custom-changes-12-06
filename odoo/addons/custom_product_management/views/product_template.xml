@@ -1,53 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_product_template_form_with_components" model="ir.ui.view">
-        <field name="name">product.template.form.with.components</field>
+    <record id="view_product_template_with_component" model="ir.ui.view">
+        <field name="name">product.template.with.components</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='invoicing']" position="after">
                 <page name="product_components" string="Product Components">
-                    <field name="component_ids">
+                    <field name="component_line_ids" nolable="1">
                         <tree editable="bottom">
                             <field name="product_component_id" string="Components" options="{'no_create': True}"/>
                             <field name="value_type"/>
-                            <field name="min_value"/>
+                            <field name="min_value" required="value_type == 'value_range'"
+                                   readonly="value_type != 'value_range'"/>
                             <field name="max_value"/>
                         </tree>
-                        <form string="Component">
-                            <group>
-                                <field name="product_component_id" options="{'no_create': True}"/>
-                                <field name="value_type"/>
-                                <field name="min_value"/>
-                                <field name="max_value"/>
-                            </group>
-                        </form>
                     </field>
                 </page>
             </xpath>
         </field>
     </record>
-    <record id="view_product_template_form_with_pricing" model="ir.ui.view">
-        <field name="name">product.template.form.with.pricing</field>
+    <record id="view_product_template_with_pricing" model="ir.ui.view">
+        <field name="name">product.template.with.pricing</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <!-- Insert the page for displaying pricing information after the Accounting tab -->
             <xpath expr="//page[@name='product_components']" position="after">
                 <page name="pricing" string="Pricing">
-                    <field name="chemical_component_ids">
+                    <field name="chemical_component_line_ids">
                         <tree editable="bottom">
-                            <field name="product_component_id" string="Components" options="{'no_create': True}"/>
+                            <field name="chemical_component_id" string="Components" options="{'no_create': True}"/>
                             <field name="value_type"/>
-                            <field name="min_value"/>
+                            <field name="min_value" required="value_type == 'value_range'"
+                                   readonly="value_type != 'value_range'"/>
                             <field name="max_value"/>
                             <field name="price"/>
                         </tree>
                         <form>
                             <group>
-                                <field name="product_component_id" options="{'no_create': True}"/>
+                                <field name="chemical_component_id" options="{'no_create': True}"/>
                                 <field name="value_type"/>
-                                <field name="min_value"/>
+                                <field name="min_value" required="value_type == 'value_range'"
+                                       readonly="value_type != 'value_range'"/>
                                 <field name="max_value"/>
                                 <field name="price"/>
                             </group>

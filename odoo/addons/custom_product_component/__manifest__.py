@@ -9,13 +9,12 @@
         'security/ir.model.access.csv',
         'views/chemical_component_menu.xml',
         'views/product_component_menu.xml',
-        'views/product_template_view.xml',
-        'views/sales_order_component_popup.xml',
         'views/sales_product_component_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'custom_product_component/static/src/**/*',
+            'web/static/src/views/fields/boolean_toggle/boolean_toggle_field.js',
         ],
     },
     'installable': True,

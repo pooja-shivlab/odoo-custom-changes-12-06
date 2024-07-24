@@ -6,6 +6,7 @@
         'base',
         'sale',
         'purchase',
+        'contacts',
     ],
     'data': [
         'security/ir.model.access.csv',

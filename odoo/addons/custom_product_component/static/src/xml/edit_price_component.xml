@@ -1,0 +1,7 @@
+<templates id="template" xml:space="preserve">
+     <t t-name="CustomBooleanToggle">
+        <div class="o_form_group">
+            <input type="checkbox" id="checkbox_input" t-on-change="onChange" t-att-checked="state.checked"/>
+        </div>
+    </t>
+</templates>

@@ -47,6 +47,7 @@ class SaleOrderLineComponentRel(models.Model):
     chemical_component_ids = fields.One2many('chemical.component.rel', 'component_ids', string='Chemical Components')
     product_template_id = fields.Many2one('product.template', string='Product Template', required=True)
     sale_order_line_id = fields.Many2one('sale.order.line', string='Sale Order Line', required=True)
+    is_checked = fields.Boolean(string='Is Checked', default=False)
 
     @api.model
     def default_get(self, fields):

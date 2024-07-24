@@ -1,6 +1,8 @@
 <odoo>
     <template id="custom_assets_backend" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/custom_product_component/static/src/js/edit_price_component.js"></script>
             <link rel="stylesheet" href="/custom_product_component/static/src/css/component_icon.css"/>
         </xpath>
     </template>

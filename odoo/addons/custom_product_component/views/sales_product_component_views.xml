@@ -5,31 +5,39 @@
             <field name="model">sale.order.line.component.rel</field>
             <field name="arch" type="xml">
                 <form>
-                    <group>
-                        <field name="product_template_id" invisible="1"/>
-                        <field name="sale_order_line_id" invisible="1"/>
-                        <field name="component_ids" widget="one2many_list" string="">
-                            <tree editable="bottom">
-                                <field name="product_component_id"/>
-                                <field name="value_type"/>
-                                <field name="min_value"/>
-                                <field name="max_value"/>
-                            </tree>
-                        </field>
-                        <field name="chemical_component_ids" widget="one2many_list" string="">
-                            <tree editable="bottom">
-                                <field name="product_component_id"/>
-                                <field name="value_type"/>
-                                <field name="min_value"/>
-                                <field name="max_value"/>
-                                <field name="price"/>
-                            </tree>
-                        </field>
-                    </group>
-                    <footer>
-                        <button name="save_changes" string="Save" type="object" class="btn-primary"/>
-                        <button string="Close" class="btn-secondary" special="cancel"/>
-                    </footer>
+                    <div class="o_component_form_view">
+                        <header>
+                            <label for="is_checked" string="Is Price Editable"/>
+                            <div>
+                                <field name="is_checked" widget="custom_boolean_toggle"/>
+                            </div>
+                        </header>
+                        <group>
+                            <field name="product_template_id" invisible="1"/>
+                            <field name="sale_order_line_id" invisible="1"/>
+                            <field name="component_ids" widget="one2many_list" string="">
+                                <tree editable="bottom">
+                                    <field name="product_component_id"/>
+                                    <field name="value_type"/>
+                                    <field name="min_value" required="value_type == 'value_range'" readonly="value_type != 'value_range'"/>
+                                    <field name="max_value"/>
+                                </tree>
+                            </field>
+                            <field name="chemical_component_ids" widget="one2many_list" string="">
+                                <tree editable="bottom">
+                                    <field name="product_component_id"/>
+                                    <field name="value_type"/>
+                                    <field name="min_value" required="value_type == 'value_range'" readonly="value_type != 'value_range'"/>
+                                    <field name="max_value"/>
+                                    <field name="price" widget="o_field_widget"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <footer>
+                            <button name="save_changes" string="Save" type="object" class="btn-primary"/>
+                            <button string="Close" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </div>
                 </form>
             </field>
         </record>

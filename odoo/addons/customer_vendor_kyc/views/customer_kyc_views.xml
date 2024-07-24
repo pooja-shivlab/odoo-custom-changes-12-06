@@ -5,15 +5,97 @@
         <record id="view_partner_form_inherit" model="ir.ui.view">
             <field name="name">res.partner.form.inherit</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+                <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="company_type" position="before">
+                    <field name="partner_type" widget="radio" options="{'horizontal': true}"/> <br/>
+                </field>
+                <field name="vat" position="after">
+                    <field name="gst_hst_number" placeholder="e.g. BE0477472701"/>
+                </field>
+                <field name="category_id" position="after">
+                    <field name="email_for_invoice" invisible="partner_type not in ['customer', 'both']"/>
+                </field>
                 <xpath expr="//sheet" position="before">
                     <div name="buttons" class="oe_button_box" groups="base.group_user" style="display: flex; align-items: center;  justify-content: space-between;">
-                        <button name="send_form_action" type="object" string="Send Form" class="btn-primary"
-                                id="send_form_button" style="margin-right: 20px;"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,publish"/>
+                        <button name="send_form_action" type="object" string="Send Customer Form" class="btn-primary"
+                                id="send_form_button" style="margin-right: 20px;" invisible="partner_type not in ['customer', 'both']"/>
+                        <button name="send_form_action" type="object" string="Send Supplier Form" class="btn-primary"
+                                id="send_form_button" style="margin-right: 20px;" invisible="partner_type not in ['supplier', 'both']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,publish,cancel"/>
                     </div>
                 </xpath>
+                <page name="internal_notes" position="after">
+                    <page name="partner_data" string="Partner" invisible="partner_type not in ['customer', 'both']">
+                        <group string="BUSINESS INFORMATION" name="business_information">
+                            <group>
+                                <field name="date"/>
+                                <field name="registration_number"/>
+                                <field name="country_parent_company"/>
+                                <field name="type_of_business"/>
+                                <field name="annual_sales"/>
+                            </group>
+                            <group>
+                                <field name="place_of_corporation"/>
+                                <field name="parent_company"/>
+                                <field name="years_under_current_ownership"/>
+                                <field name="number_of_location"/>
+                                <field name="fiscal_years_end_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="REQUESTED TRADING TERMS AND INFORMATION" name="requested_trading">
+                                <field name="payment_terms"/>
+                                <field name="requested_credit_limit"/>
+                                <field name="trade_currency"/>
+                            </group>
+                            <group string="DIGITAL SIGN OFF" name="digital_sign_off">
+                                <field name="name"/>
+                                <field name="designation"/>
+                                <field name="digital_sign_date"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="vendor_data" string="Vendor" invisible="partner_type not in ['supplier', 'both']">
+                        <group>
+                            <group string="BUSINESS ADDRESS" name="business_address">
+                                <field name="ext_number"/>
+                                <field name="vendor_po_box"/>
+                                <field name="vendor_fax"/>
+                            </group>
+                        </group>
+                        <group string="ORDER INFORMATION" name="order_information">
+                            <group>
+                                <field name="email_for_order"/>
+                                <field name="order_template_number"/>
+                                <field name="quebec_tax_number"/>
+                                <field name="irs_number"/>
+                                <field name="order_currency"/>
+                                <field name="payment_method"/>
+                            </group>
+                            <group>
+                                <field name="order_contact"/>
+                                <field name="order_ext_number"/>
+                                <field name="order_gst_number"/>
+                                <field name="order_language"/>
+                                <field name="order_specify"/>
+                            </group>
+                        </group>
+                        <group string="BANKING INFORMATION" name="banking_extra_info">
+                            <group>
+                                <field name="usa_bank_aba"/>
+                                <field name="usa_bank_swift_code"/>
+                                <field name="email_for_payment"/>
+                                <field name="vendor_date"/>
+                            </group>
+                            <group>
+                                <field name="usa_bank_name"/>
+                                <field name="usa_account_number"/>
+                                <field name="vendor_completed_by"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
             </field>
         </record>
     </data>
