@@ -3,7 +3,7 @@
     'version': '1.0',
     'summary': 'Adds custom fields to product',
     'depends': [
-        'base', 'web', 'product', 'stock', 'sale', 'custom_product_component',
+        'base', 'web', 'product', 'stock', 'sale', 'custom_product_component', 'purchase',
     ],
     'data': [
         'security/ir.model.access.csv',

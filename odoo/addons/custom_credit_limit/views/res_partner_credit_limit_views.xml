@@ -11,6 +11,7 @@
                         <group name="credit_limit" string="Credit Limit">
                             <field name="customer_credit_limit"/>
                             <field name="blocking_limit"/>
+                            <field name="total_receivable_amount"/>
                         </group>
                     </xpath>
                 </data>

@@ -6,6 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='purchase_order_id']" position="after">
+                <field name="receivable_amount"/>
                 <field name="customer_credit_limit"/>
                 <field name="blocking_limit"/>
             </xpath>
@@ -17,9 +18,12 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="after">
-                <div class="alert alert-info" role="alert" style="font-size: 16px; padding: 10px;"
-                     invisible="customer_due_amount == ''">
-                    <field name="customer_due_amount"/>
+                <div class="alert alert-info mt2 mb2" role="alert" style="font-size: 18px; padding: 10px;" invisible="partner_id == False">
+                     The Customer's Due Amount is <field name="receivable_amount" readonly="1" nolabel="1"/>
+                </div>
+                <field name="is_warning" invisible="1"/>
+                <div class="alert alert-danger mt2" role="alert" style="font-size: 14px; padding: 10px;" invisible="partner_id == False or is_warning != True">
+                     <field name="customer_credit_warning" readonly="1" nolabel="1" widget="text"/>
                 </div>
             </xpath>
         </field>
