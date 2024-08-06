@@ -63,3 +63,17 @@ class SaleOrder(models.Model):
             if order.customer_credit_warning:
                 raise UserError(order.customer_credit_warning)
         return super(SaleOrder, self).action_confirm()
+
+    @api.model
+    def get_credit_limit_warnings(self):
+        sale_orders = self.search([
+            ('state', 'in', ['draft', 'sent', 'sale', 'done'])
+        ])
+        unique_warnings = set()  # To keep track of unique messages
+
+        for order in sale_orders:
+            order._compute_customer_credit_warning()  # Ensure computed field is updated
+            if order.is_warning:
+                if order.customer_credit_warning not in unique_warnings:
+                    unique_warnings.add(order.customer_credit_warning)
+                    return {'message': order.customer_credit_warning}

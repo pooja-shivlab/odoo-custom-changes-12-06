@@ -1,7 +1,7 @@
 from odoo import models, fields, api
-import logging
-
-_logger = logging.getLogger(__name__)
+import uuid
+from odoo.http import request
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
@@ -20,7 +20,13 @@ class ResPartner(models.Model):
         ('both', 'Both'),
     ], string='Partner Type', default='customer')
     gst_hst_number = fields.Char(string='GST/HST number')
+
+    # Partner details
     email_for_invoice = fields.Char(string='Preferred Email For Invoice')
+    date = fields.Date(string='Business Start Date')
+    # business_street_name = fields.Char(string='Street')
+    # additional_business_street_name = fields.Char(string='Street 2')
+    # business_city = fields.Char(string='City')
     registration_number = fields.Char(string='Registration Number')
     country_parent_company = fields.Char(string='Country of Parent Company')
     type_of_business = fields.Char(string='Type of Business')
@@ -37,15 +43,16 @@ class ResPartner(models.Model):
         ('eur', 'EUR'),
         ('usd', 'USD'),
     ], string='Trade Currency')
-    date = fields.Date(string='Business Start Date')
     name = fields.Char(string='Completed By')
     designation = fields.Char(string='Designation')
     digital_sign_date = fields.Date(string='Date')
+
+    # Supplier details
     ext_number = fields.Char(string='EXT Number')
     vendor_po_box = fields.Char(string='Vendor P.O. Box')
     vendor_fax = fields.Char(string='Vendor Fax')
     email_for_order = fields.Char(string='Email Address for Order Management')
-    order_template_number = fields.Char(string='Order Template Number')
+    order_template_number = fields.Char(string='Order Telephone Number')
     quebec_tax_number = fields.Char(string='Order Quebec Tax Number')
     irs_number = fields.Char(string='Order IRS Number')
     order_currency = fields.Selection([
@@ -73,31 +80,86 @@ class ResPartner(models.Model):
     usa_bank_name = fields.Char(string='USA Bank Name')
     usa_account_number = fields.Char(string='USA Account Number')
     vendor_completed_by = fields.Char(string='Vendor Completed By')
+    token = fields.Char(string='Token', readonly=True)
+    is_send_for_partner_kyc = fields.Boolean(string='Is Send for Partner KYC', default=False)
+    is_send_for_supplier_kyc = fields.Boolean(string='Is Send for Supplier KYC', default=False)
+    partner_request_url = fields.Char(string='Partner Form URL', readonly=True)
+    vendor_request_url = fields.Char(string='Vendor Form URL', readonly=True)
+    partner_kyc_data_filled = fields.Boolean(string='Customer Kyc data filled', default=False)
+    supplier_kyc_data_filled = fields.Boolean(string='Vendor Kyc data filled', default=False)
+    partner_published = fields.Boolean(string='Customer Kyc Done', default=False)
+    supplier_published = fields.Boolean(string='Vendor Kyc Done', default=False)
 
-    def send_form_action(self):
+    @api.model
+    def default_get(self, fields_list):
+        res = super(ResPartner, self).default_get(fields_list)
+        if 'token' in fields_list:
+            res['token'] = uuid.uuid4().hex
+        return res
+
+    def partner_send_form_action(self):
         for partner in self:
-            form = self.env['customer.details.form'].create({
-                'customer_id': partner.id,
-            })
-            _logger.info("Created form: %s", form)
-            link = '/customer/form/%s' % (form.token)
-            _logger.info("Generated link: %s", link)
+            # Define the URL for the form
+            partner.is_send_for_partner_kyc = True
+            base_url = '/customer_form/%s' % partner.token
+            url = request.httprequest.host_url.rstrip('/') + base_url
+            partner.partner_request_url = url
 
-            try:
-                template = self.env.ref('customer_vendor_kyc.email_template_form')
-                if template:
-                    # Prepare the context with the link
-                    ctx = {
-                        'link': link,
-                    }
-                    _logger.info("Email context: %s", ctx)  # Log the context for debugging
-                    # Generate the email content from the template
-                    template.with_context(ctx).send_mail(
-                        partner.id,
-                        force_send=True,
-                        email_values={'email_to': partner.email, 'email_from': 'pooja.ahuja@shivlab.com'}
-                    )
-                    partner.state = 'waiting_for_approval'
-            except Exception as e:
-                _logger.error("Failed to send email: %s", e)
-                raise
+            template = self.env.ref('customer_vendor_kyc.email_template_form').id
+            if partner.email:
+                self.env['mail.template'].browse(template).send_mail(
+                    partner.id, force_send=True,
+                    email_values={'email_to': partner.email, 'email_from': 'pooja.ahuja@shivlab.com'})
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': 'The registration link has been sent to the contact.',
+                        'sticky': False,
+                    },
+                }
+            else:
+                raise UserError("Email is required!")
+
+    def supplier_send_form_action(self):
+        for partner in self:
+            # Define the URL for the form
+            # url = '/customer_form/%s' % partner.id
+            partner.is_send_for_supplier_kyc = True
+            base_url = '/vendor_form/%s' % partner.token
+            url = request.httprequest.host_url.rstrip('/') + base_url
+            partner.vendor_request_url = url
+
+            template = self.env.ref('customer_vendor_kyc.email_template_form').id
+            if partner.email:
+                self.env['mail.template'].browse(template).send_mail(
+                    partner.id, force_send=True,
+                    email_values={'email_to': partner.email, 'email_from': 'pooja.ahuja@shivlab.com'})
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': 'The registration link has been sent to the contact.',
+                        'sticky': False,
+                    },
+                }
+            else:
+                raise UserError("Email is required!")
+
+    def publish_partner(self):
+        for record in self:
+            if record.state == 'waiting_for_approval':
+                record.state = 'publish'
+                if record.partner_type in ['customer', 'both']:
+                    record.partner_published = True
+                if record.partner_type in ['supplier', 'both']:
+                    record.supplier_published = True
+
+    def decline_partner(self):
+        for record in self:
+            if record.state == 'waiting_for_approval':
+                record.state = 'cancel'
+                if record.partner_type in ['customer', 'both']:
+                    record.partner_published = False
+                if record.partner_type in ['supplier', 'both']:
+                    record.supplier_published = False

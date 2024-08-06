@@ -322,7 +322,7 @@ class SaleOrderLine(models.Model):
             name = line._get_sale_order_line_multiline_description_sale()
 
             # Append components to the description
-            components = line.product_id.product_tmpl_id.component_ids
+            components = line.product_id.product_tmpl_id.component_line_ids
             if components:
                 component_lines = []
                 for comp in components:

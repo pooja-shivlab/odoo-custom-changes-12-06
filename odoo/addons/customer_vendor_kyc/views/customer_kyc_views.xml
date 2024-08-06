@@ -5,10 +5,11 @@
         <record id="view_partner_form_inherit" model="ir.ui.view">
             <field name="name">res.partner.form.inherit</field>
             <field name="model">res.partner</field>
-                <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="company_type" position="before">
-                    <field name="partner_type" widget="radio" options="{'horizontal': true}"/> <br/>
+                    <field name="partner_type" widget="radio" options="{'horizontal': true}"/>
+                    <br/>
                 </field>
                 <field name="vat" position="after">
                     <field name="gst_hst_number" placeholder="e.g. BE0477472701"/>
@@ -16,13 +17,55 @@
                 <field name="category_id" position="after">
                     <field name="email_for_invoice" invisible="partner_type not in ['customer', 'both']"/>
                 </field>
+                <field name="gst_hst_number" position="after">
+                    <field name="token" invisible="0"/>
+                    <field name="is_send_for_supplier_kyc" string='Supplier KYC' invisible="0"/>
+                    <field name="is_send_for_partner_kyc" string='Customer KYC' invisible="0"/>
+                    <field name="supplier_kyc_data_filled" string='Vendor Data filled' invisible="0"/>
+                    <field name="supplier_published" invisible="0"/>
+                    <field name="partner_kyc_data_filled" string='Customer Data filled' invisible="0"/>
+                    <field name="partner_published" invisible="0"/>
+                </field>
                 <xpath expr="//sheet" position="before">
-                    <div name="buttons" class="oe_button_box" groups="base.group_user" style="display: flex; align-items: center;  justify-content: space-between;">
-                        <button name="send_form_action" type="object" string="Send Customer Form" class="btn-primary"
-                                id="send_form_button" style="margin-right: 20px;" invisible="partner_type not in ['customer', 'both']"/>
-                        <button name="send_form_action" type="object" string="Send Supplier Form" class="btn-primary"
-                                id="send_form_button" style="margin-right: 20px;" invisible="partner_type not in ['supplier', 'both']"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_for_approval,publish,cancel"/>
+                    <div class="alert alert-success text-center o_form_header alert-dismissible"
+                         invisible="not is_send_for_partner_kyc or (partner_published and partner_kyc_data_filled)" role="status">
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                        <div>
+                            <strong>An invitation email containing the following customer kyc link has been sent:
+                            </strong>
+                        </div>
+                        <div>
+                            <field name="partner_request_url" widget="url"/>
+                        </div>
+                    </div>
+                    <div class="alert alert-success text-center o_form_header alert-dismissible"
+                         invisible="not is_send_for_supplier_kyc or (supplier_published and supplier_kyc_data_filled)" role="status">
+                        <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                        <div>
+                            <strong>An invitation email containing the following vendor kyc link has been sent:</strong>
+                        </div>
+                        <div>
+                            <field name="vendor_request_url" widget="url"/>
+                        </div>
+                    </div>
+                    <div name="buttons" class="oe_button_box" groups="base.group_user"
+                         style="display: flex; align-items: center;  justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap:10px;">
+                            <button name="partner_send_form_action" type="object" string="Send Customer Form"
+                                    class="btn-primary"
+                                    id="partner_send_form_button" style="margin-right: 20px;"
+                                    invisible="is_send_for_partner_kyc or partner_type not in ['customer', 'both']"/>
+                            <button name="supplier_send_form_action" type="object" string="Send Supplier Form"
+                                    class="btn-primary"
+                                    id="supplier_send_form_button" style="margin-right: 20px;"
+                                    invisible="is_send_for_supplier_kyc or partner_type not in ['supplier', 'both']"/>
+                            <button string="Publish" name="publish_partner" type="object" class="oe_highlight"
+                                    invisible="state not in ['waiting_for_approval']"/>
+                            <button string="Decline" name="decline_partner" type="object"
+                                    invisible="state not in ['waiting_for_approval']"/>
+                        </div>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,waiting_for_approval,publish,cancel"/>
                     </div>
                 </xpath>
                 <page name="internal_notes" position="after">

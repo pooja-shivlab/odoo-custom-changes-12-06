@@ -319,6 +319,7 @@ class PurchaseOrderLine(models.Model):
         for line in self:
             if not line.product_id or line.invoice_lines or not line.company_id:
                 continue
+
             params = {'order_id': line.order_id}
             seller = line.product_id._select_seller(
                 partner_id=line.partner_id,
@@ -326,6 +327,45 @@ class PurchaseOrderLine(models.Model):
                 date=line.order_id.date_order and line.order_id.date_order.date() or fields.Date.context_today(line),
                 uom_id=line.product_uom,
                 params=params)
+
+            # Generate the component description
+            name = line._get_product_purchase_description(line.product_id.with_context(
+                {'seller_id': seller.id, 'lang': get_lang(line.env, line.partner_id.lang).code}))
+
+            components = line.product_id.product_tmpl_id.component_line_ids
+            if components:
+                component_lines = []
+                for comp in components:
+                    component_name = comp.product_component_id.short_name
+                    value_type = comp.value_type
+                    if value_type == 'value_range':
+                        min_value = comp.min_value or 0.0
+                        max_value = comp.max_value or 0.0
+                        component_line = "{}: {}-{}".format(component_name, min_value, max_value)
+                    elif value_type == 'fix_value':
+                        min_value = comp.min_value
+                        max_value = comp.max_value
+                        if min_value is not None and max_value is not None:
+                            component_line = "{}: {}-{}".format(component_name, min_value, max_value)
+                        elif min_value is not None:
+                            component_line = "{}: {}".format(component_name, min_value)
+                        elif max_value is not None:
+                            component_line = "{}: {}".format(component_name, max_value)
+                        else:
+                            component_line = component_name
+                    else:
+                        component_line = component_name
+
+                    component_lines.append(component_line)
+
+                component_list = '\n'.join(component_lines)
+                name += '\nComponents:\n{}'.format(component_list)
+                line.name = name
+            else:
+                # If no components, use the product description logic
+                product_ctx = {'seller_id': seller.id if seller else None, 'partner_id': None,
+                               'lang': get_lang(line.env, line.partner_id.lang).code}
+                line.name = line._get_product_purchase_description(line.product_id.with_context(product_ctx))
 
             if seller or not line.date_planned:
                 line.date_planned = line._get_date_planned(seller).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -360,18 +400,6 @@ class PurchaseOrderLine(models.Model):
             price_unit = float_round(price_unit, precision_digits=max(line.currency_id.decimal_places, self.env['decimal.precision'].precision_get('Product Price')))
             line.price_unit = seller.product_uom._compute_price(price_unit, line.product_uom)
             line.discount = seller.discount or 0.0
-
-            # record product names to avoid resetting custom descriptions
-            default_names = []
-            vendors = line.product_id._prepare_sellers({})
-            product_ctx = {'seller_id': None, 'partner_id': None, 'lang': get_lang(line.env, line.partner_id.lang).code}
-            default_names.append(line._get_product_purchase_description(line.product_id.with_context(product_ctx)))
-            for vendor in vendors:
-                product_ctx = {'seller_id': vendor.id, 'lang': get_lang(line.env, line.partner_id.lang).code}
-                default_names.append(line._get_product_purchase_description(line.product_id.with_context(product_ctx)))
-            if not line.name or line.name in default_names:
-                product_ctx = {'seller_id': seller.id, 'lang': get_lang(line.env, line.partner_id.lang).code}
-                line.name = line._get_product_purchase_description(line.product_id.with_context(product_ctx))
 
     @api.depends('product_id', 'product_qty', 'product_uom')
     def _compute_product_packaging_id(self):

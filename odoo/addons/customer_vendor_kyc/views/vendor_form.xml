@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="vendor_form">
+        <!-- Insert inline CSS into the <head> section -->
+        <xpath expr="//head" position="inside">
+            <style>
+                .container {
+                padding: 20px;
+                margin: 0 auto;
+                max-width: 1200px;
+                font-family: Arial, sans-serif;
+                }
+
+                h1 {
+                color: #333;
+                font-size: 2em;
+                margin-bottom: 20px;
+                }
+
+                .section {
+                margin-bottom: 30px;
+                }
+
+                .section h2 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+                }
+
+                .group h3 {
+                width: 100%;
+                font-size: 1.2em;
+                margin-bottom: 10px;
+                }
+
+                .form-group label {
+                font-weight: bold;
+                margin-bottom: 5px;
+                display: block;
+                }
+
+                .form-group input, .form-group select, .form-group textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                }
+
+                .form-group textarea {
+                height: 100px;
+                }
+
+                .button-container {
+                text-align: right;
+                margin-top: 20px;
+                }
+
+                .button-container button {
+                padding: 10px 20px;
+                font-size: 1em;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-left: 10px;
+                }
+
+                .button-container .cancel-btn {
+                background-color: #f44336;
+                color: #fff;
+                }
+
+                .button-container .submit-btn {
+                background-color: #4caf50;
+                color: #fff;
+                }
+
+                .button-container .cancel-btn:hover {
+                background-color: #d32f2f;
+                }
+
+                .button-container .submit-btn:hover {
+                background-color: #388e3c;
+                }
+            </style>
+        </xpath>
+
+        <form id="vendor_form" action="/submit_vendor_form" method="post">
+            <input type="hidden" name="token" t-att-value="token"/>
+            <div class="container">
+                <h1 style="text-align: center;">Vendor Form</h1>
+
+                <!-- Main Section 1: RESERVE TO VENDOR -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">RESERVE TO VENDOR</h2>
+                    <h3>BUSINESS ADDRESS</h3>
+                    <div style="display: flex;  justify-content: space-between; gap:10px;">
+                        <!-- Group/Section 1 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="vendor_name">Vendor Name</label>
+                                <input type="text" id="vendor_name" name="vendor_name" readonly="readonly"
+                                       t-att-value="vendor_name" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street" t-att-value="street"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input type="text" id="country" name="country" t-att-value="country"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" t-att-value="city"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Telephone</label>
+                                <input type="text" id="phone_number" name="phone_number" t-att-value="phone_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="vendor_fax">Fax Number</label>
+                                <input type="text" id="vendor_fax" name="vendor_fax" t-att-value="vendor_fax"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Group/Section 2 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="vendor_email">Vendor Email</label>
+                                <input type="email" id="vendor_email" name="vendor_email" t-att-value="vendor_email"
+                                       readonly="readonly" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street2">Street 2</label>
+                                <input type="text" id="street2" name="street2" t-att-value="street2"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <select id="state" name="state" t-att-value="state" style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="postal_code">Postal Code</label>
+                                <input type="text" id="postal_code" name="postal_code" t-att-value="postal_code"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="ext_number">Ext Number</label>
+                                <input type="text" id="ext_number" name="ext_number" t-att-value="ext_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="vendor_po_box">P.O. Box</label>
+                                <input type="text" id="vendor_po_box" name="vendor_po_box" t-att-value="vendor_po_box"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>ALTERNATIVE PAY TO</h3>
+                    <div style="display: flex;  justify-content: space-between; gap:10px;">
+                        <!-- Group/Section 1 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="alternative_vendor_name">Vendor Name</label>
+                                <input type="text" id="alternative_vendor_name" name="alternative_vendor_name"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_street2">Street 2</label>
+                                <input type="text" id="alternative_street2" name="alternative_street2"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_state">State</label>
+                                <input type="text" id="alternative_state" name="alternative_state"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_postal_code">Postal Code</label>
+                                <input type="text" id="alternative_postal_code" name="alternative_postal_code"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_ext_number">Ext Number</label>
+                                <input type="text" id="alternative_ext_number" name="alternative_ext_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_po_box">P.O. Box</label>
+                                <input type="text" id="alternative_po_box" name="alternative_po_box"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Group/Section 2 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="alternative_street">Street</label>
+                                <input type="text" id="alternative_street" name="alternative_street"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_country">Country</label>
+                                <select id="alternative_country" name="alternative_country"
+                                        style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_city">City</label>
+                                <input type="text" id="alternative_city" name="alternative_city"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_telephone">Telephone</label>
+                                <input type="text" id="alternative_telephone" name="alternative_telephone"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="alternative_fax_number">Fax Number</label>
+                                <input type="text" id="alternative_fax_number" name="alternative_fax_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 2: ORDER INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">ORDER INFORMATION</h2>
+
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <!-- Group/Section 1 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="email_for_order">Email for Order Management</label>
+                                <input type="text" id="email_for_order" name="email_for_order"
+                                       t-att-value="email_for_order" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_template_number">Telephone</label>
+                                <input type="text" id="order_template_number" name="order_template_number"
+                                       t-att-value="order_template_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="quebec_tax_number">Quebec Tax Number</label>
+                                <input type="text" id="quebec_tax_number" name="quebec_tax_number"
+                                       t-att-value="quebec_tax_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="irs_number">IRS Number</label>
+                                <input type="text" id="irs_number" name="irs_number" t-att-value="irs_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_currency">Order Currency</label>
+                                <select id="order_currency" name="order_currency" t-att-value="order_currency"
+                                        style="border-radius: 20px;">
+                                    <option value="cad">CAD</option>
+                                    <option value="eur">EUR</option>
+                                    <option value="usd">USD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="payment_method">Method of Payment</label>
+                                <select id="payment_method" name="payment_method" t-att-value="payment_method"
+                                        style="border-radius: 20px;">
+                                    <option value="cheque">Cheque</option>
+                                    <option value="direct_deposit">Direct Deposit or ACH Payment</option>
+                                    <option value="wire_transfer">Wire Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Group/Section 2 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="order_contact">Contact</label>
+                                <input type="text" id="order_contact" name="order_contact"
+                                       t-att-value="order_contact" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_ext_number">Ext Number</label>
+                                <input type="text" id="order_ext_number" name="order_ext_number"
+                                       t-att-value="order_ext_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_gst_number">GST Number</label>
+                                <input type="text" id="order_gst_number" name="order_gst_number"
+                                       t-att-value="order_gst_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_language">Language</label>
+                                <select id="order_language" name="order_language" t-att-value="order_language"
+                                        style="border-radius: 20px;">
+                                    <option value="english">English</option>
+                                    <option value="french">French</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_specify">Specify</label>
+                                <input type="text" id="order_specify" name="order_specify" t-att-value="order_specify"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 3: BANKING INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">BANKING INFORMATION</h2>
+
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <div class="form-group">
+                            <label for="name_of_bank">Name of the Bank</label>
+                            <input type="text" id="name_of_bank" name="name_of_bank"
+                                   style="border-radius: 20px;"/>
+                        </div>
+                    </div>
+
+                    <h3>CANADIAN BANK CANADIAN $</h3>
+                    <h4>PERSON 1 DETAILS</h4>
+                    <div style="display: flex; justify-content: space-between; gap:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="transit_number">Transit Number</label>
+                                <input type="text" id="transit_number" name="transit_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="bank_id">Bank ID</label>
+                                <input type="text" id="bank_id" name="bank_id" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="account_number">Account Number</label>
+                                <input type="text" id="account_number" name="account_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>CANADIAN BANK USD $</h3>
+                    <div style="display: flex; justify-content: space-between; gap:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="usd_transit_number">Transit Number</label>
+                                <input type="text" id="usd_transit_number" name="usd_transit_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="usd_bank_id">Bank ID</label>
+                                <input type="text" id="usd_bank_id" name="usd_bank_id" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="usd_account_number">Account Number</label>
+                                <input type="text" id="usd_account_number" name="usd_account_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px;">
+                            <div class="form-group">
+                                <label for="usa_bank_name">USA Bank / Others</label>
+                                <input type="text" id="usa_bank_name" name="usa_bank_name"
+                                       t-att-value="usa_bank_name" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="usa_account_number">Account Number</label>
+                                <input type="text" id="usa_account_number" name="usa_account_number"
+                                       t-att-value="usa_account_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email_for_payment">Email For Payment Confirmation</label>
+                                <input type="text" id="email_for_payment" name="email_for_payment"
+                                       t-att-value="email_for_payment" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="vendor_date">Date</label>
+                                <input type="date" id="vendor_date" name="vendor_date"
+                                       t-att-value="vendor_date" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="usa_bank_aba">ABA Number</label>
+                                <input type="text" id="usa_bank_aba" name="usa_bank_aba"
+                                       t-att-value="usa_bank_aba" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="usa_bank_swift_code">Swift Code</label>
+                                <input type="text" id="usa_bank_swift_code" name="usa_bank_swift_code"
+                                       t-att-value="usa_bank_swift_code" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="vendor_completed_by">By</label>
+                                <input type="text" id="vendor_completed_by" name="vendor_completed_by"
+                                       t-att-value="vendor_completed_by" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button type="button" class="cancel-btn" style="border-radius: 20px;">Cancel</button>
+                    <button type="submit" class="submit-btn" style="border-radius: 20px;">Submit</button>
+                </div>
+
+            </div>
+        </form>
+    </template>
+</odoo>

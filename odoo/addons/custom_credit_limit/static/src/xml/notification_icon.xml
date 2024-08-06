@@ -1,16 +1,19 @@
 <odoo>
     <t t-name="custom_credit_limit.assets">
-        <div class="o_notification_icon notification-icon" t-on-click="toggleDropdown">
+        <div class="o_notification_icon notification-icon" t-on-click="toggleDropdown" >
             <i class="fa fa-bell dropdown-toggle-button" role="button"></i>
             <ul class="menu-dropdown" t-att-class="{'show': state.isOpen}">
-                <li class="soft-warning-menu">
-                    <i class="fa fa-handshake-o py-2 orange" aria-hidden="true"></i>
-                    <a t-attf-href="/partner_overview" class="dropdown-new-item soft-warning">Soft Warning 0</a>
-                </li>
-                <li class="hard-warning-menu">
-                    <i class="fa fa-handshake-o py-2 red" aria-hidden="true"></i>
-                    <a t-attf-href="/partner_overview" class="dropdown-new-item hard-warning">Hard Warning 0</a>
-                </li>
+                <t t-if="state.warning">
+                    <li class="warning-menu">
+                        <i class="fa fa-exclamation-triangle py-2 red" aria-hidden="true"></i>
+                         <p style="color: red;" t-esc="state.warning">Default warning message</p>
+                        <button class="btn btn-primary">Stay Here</button>
+                        <button class="btn btn-secondary">Discard</button>
+                    </li>
+                </t>
+                <t t-else="">
+                    <li>No warnings available.</li>
+                </t>
             </ul>
         </div>
     </t>

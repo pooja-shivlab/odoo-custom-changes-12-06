@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customer_form">
+        <!-- Insert inline CSS into the <head> section -->
+        <xpath expr="//head" position="inside">
+            <style>
+                .container {
+                padding: 20px;
+                margin: 0 auto;
+                max-width: 1200px;
+                font-family: Arial, sans-serif;
+                }
+
+                h1 {
+                color: #333;
+                font-size: 2em;
+                margin-bottom: 20px;
+                }
+
+                .section {
+                margin-bottom: 30px;
+                }
+
+                .section h2 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+                }
+
+                .group h3 {
+                width: 100%;
+                font-size: 1.2em;
+                margin-bottom: 10px;
+                }
+
+                .form-group label {
+                font-weight: bold;
+                margin-bottom: 5px;
+                display: block;
+                }
+
+                .form-group input, .form-group select, .form-group textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                }
+
+                .form-group textarea {
+                height: 100px;
+                }
+
+                .button-container {
+                text-align: right;
+                margin-top: 20px;
+                }
+
+                .button-container button {
+                padding: 10px 20px;
+                font-size: 1em;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-left: 10px;
+                }
+
+                .button-container .cancel-btn {
+                background-color: #f44336;
+                color: #fff;
+                }
+
+                .button-container .submit-btn {
+                background-color: #4caf50;
+                color: #fff;
+                }
+
+                .button-container .cancel-btn:hover {
+                background-color: #d32f2f;
+                }
+
+                .button-container .submit-btn:hover {
+                background-color: #388e3c;
+                }
+            </style>
+        </xpath>
+
+        <form id="customer_form" action="/submit_customer_form" method="post">
+            <input type="hidden" name="token" t-att-value="token"/>
+            <div class="container">
+                <h1 style="text-align: center;">Customer Form</h1>
+
+                <!-- Main Section 1: COMPANY INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Company Information</h2>
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <!-- Group/Section 1 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="partner_name">Legal Business Name</label>
+                                <input type="text" id="partner_name" name="partner_name" t-att-value="partner_name"
+                                       readonly="readonly" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="trading_name">Trading Name</label>
+                                <input type="text" id="trading_name" name="trading_name" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street2">Street 2</label>
+                                <input type="text" id="street2" name="street2" t-att-value="street2"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" t-att-value="state"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Phone Number</label>
+                                <input type="text" id="phone_number" name="phone_number" t-att-value="phone_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="vat_number">VAT / IRS TAX / GST / HST (CANADA) TAX NUMBER</label>
+                                <input type="text" id="vat_number" name="vat_number" t-att-value="vat_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="goods_service">GOODS/ Service SUPPLIED</label>
+                                <input type="text" id="goods_service" name="goods_service"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Group/Section 2 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="partner_email">Customer Email</label>
+                                <input type="email" id="partner_email" name="partner_email" t-att-value="partner_email"
+                                       readonly="readonly" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street" t-att-value="street"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select id="country" name="country" t-att-value="country" style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" t-att-value="city"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="company_website">Company Website</label>
+                                <input type="url" id="company_website" name="company_website"
+                                       t-att-value="company_website" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="country_registration">Country of Registration</label>
+                                <select id="country_registration" name="country_registration"
+                                        style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 2: BUSINESS INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Business Information</h2>
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <!-- Group/Section 1 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="business_start_date">Business Start Date</label>
+                                <input type="date" id="business_start_date" name="business_start_date"
+                                       t-att-value="business_start_date" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Street</label>
+                                <input type="text" id="street" name="street" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select id="country" name="country" style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="parent_company">Parent Company / Group</label>
+                                <input type="text" id="parent_company" name="parent_company"
+                                       t-att-value="parent_company" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="years_ownership">Years Under Current Ownership</label>
+                                <input type="number" id="years_ownership" name="years_ownership"
+                                       t-att-value="years_ownership" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="number_locations">Number of Locations</label>
+                                <input type="number" id="number_locations" name="number_locations"
+                                       t-att-value="number_locations" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="fiscal_year_end">Fiscal Year End Date</label>
+                                <input type="date" id="fiscal_year_end" name="fiscal_year_end"
+                                       t-att-value="fiscal_year_end" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Group/Section 2 -->
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="place_incorporation">Place of Incorporation or Registration</label>
+                                <input type="text" id="place_incorporation" name="place_incorporation"
+                                       t-att-value="place_of_corporation" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="street2">Street 2</label>
+                                <input type="text" id="street2" name="street2" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="registration_number">Registration Number</label>
+                                <input type="text" id="registration_number" name="registration_number"
+                                       t-att-value="registration_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="country_parent_company">Country of Parent Company</label>
+                                <select id="country_parent_company" name="country_parent_company"
+                                        t-att-value="country_parent_company" style="border-radius: 20px;">
+                                    <!-- Options to be added -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="type_of_business">Type of Business</label>
+                                <input type="text" id="type_of_business" name="type_of_business"
+                                       t-att-value="type_of_business" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="annual_sales">Annual Sales</label>
+                                <input type="text" id="annual_sales" name="annual_sales" t-att-value="annual_sales"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 3: CONTACT INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Contact Information</h2>
+
+                    <!-- Trading Contact Person Details -->
+                    <h3>Trading Contact Person Details</h3>
+                    <div style="display: flex; justify-content: space-between; gap:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="trading_contact_name">Name</label>
+                                <input type="text" id="trading_contact_name" name="trading_contact_name"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="trading_contact_email">Email ID</label>
+                                <input type="email" id="trading_contact_email" name="trading_contact_email"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="trading_contact_telephone">Telephone</label>
+                                <input type="text" id="trading_contact_telephone" name="trading_contact_telephone"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Finance Contact Person Details -->
+                    <h3>Finance Contact Person Details</h3>
+                    <div style="display: flex; justify-content: space-between; gap:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="finance_contact_name">Name</label>
+                                <input type="text" id="finance_contact_name" name="finance_contact_name"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="finance_contact_email">Email ID</label>
+                                <input type="email" id="finance_contact_email" name="finance_contact_email"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="finance_contact_telephone">Telephone</label>
+                                <input type="text" id="finance_contact_telephone" name="finance_contact_telephone"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferred Email Address for Invoices -->
+                    <div style="display: flex; justify-content: space-between; gap:10px; padding-top:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="preferred_email_for_invoice">Preferred Email Address for Invoices</label>
+                                <input type="email" id="preferred_email_for_invoice" name="preferred_email_for_invoice"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 4: TRADE REFERENCE -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Trade Reference</h2>
+                    <h3>Reference 1</h3>
+                    <div style="display: flex; justify-content: space-between; gap:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="reference_name">Name</label>
+                                <input type="text" id="reference_name" name="reference_name"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="reference_email">Email ID</label>
+                                <input type="email" id="reference_email" name="reference_email"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="reference_telephone">Telephone</label>
+                                <input type="text" id="reference_telephone" name="reference_telephone"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 5: REQUESTED TRADING TERMS AND INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Requested Trading Terms
+                        and Information
+                    </h2>
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="payment_terms">Payment Terms</label>
+                                <input type="text" id="payment_terms" name="payment_terms"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="credit_limit">Credit Limit</label>
+                                <input type="text" id="credit_limit" name="credit_limit" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="trading_currency">Trading Currency</label>
+                                <select id="trading_currency" name="trading_currency" style="border-radius: 20px;">
+                                    <option value="GBP">GBP</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="USD">USD</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 6: BANKING INFORMATION -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Banking Information</h2>
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top: 10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="name_of_bank">Bank Name</label>
+                                <input type="text" id="name_of_bank" name="name_of_bank" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="iban_number">IBAN Number</label>
+                                <input type="text" id="iban_number" name="iban_number" style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="bank_address">Bank Address</label>
+                                <input type="text" id="bank_address" name="bank_address" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="account_number">Account Number</label>
+                                <input type="text" id="account_number" name="account_number"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="bic_swift_code">BIC/SWIFT Code</label>
+                                <input type="text" id="bic_swift_code" name="bic_swift_code"
+                                       style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Section 7: DIGITAL SIGN OFF -->
+                <div class="section">
+                    <h2 style="background-color: #e9ecef; padding: 15px; border-radius: 5px;">Digital Sign Off</h2>
+                    <div style="display: flex;  justify-content: space-between; gap:10px; padding-top:10px;">
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="completed_by">Completed By</label>
+                                <input type="text" id="completed_by" name="completed_by" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="designation">Designation</label>
+                                <input type="text" id="designation" name="designation" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                        <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
+                            <div class="form-group">
+                                <label for="signoff_date">Date</label>
+                                <input type="date" id="signoff_date" name="signoff_date" style="border-radius: 20px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button type="button" class="cancel-btn" style="border-radius: 20px;">Cancel</button>
+                    <button type="submit" class="submit-btn" style="border-radius: 20px;">Submit</button>
+                </div>
+            </div>
+        </form>
+    </template>
+</odoo>
