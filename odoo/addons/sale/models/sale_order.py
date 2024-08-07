@@ -931,6 +931,9 @@ class SaleOrder(models.Model):
         self.order_line._validate_analytic_distribution()
 
         for order in self:
+            if order.partner_id.state != 'publish':
+                raise UserError("KYC is not completed for this customer...")
+
             order.validate_taxes_on_sales_order()
             if order.partner_id in order.message_partner_ids:
                 continue

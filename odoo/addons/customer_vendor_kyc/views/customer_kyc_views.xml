@@ -55,10 +55,18 @@
                                     class="btn-primary"
                                     id="partner_send_form_button" style="margin-right: 20px;"
                                     invisible="is_send_for_partner_kyc or partner_type not in ['customer', 'both']"/>
+                            <button name="partner_send_form_action" type="object" string="Re Send Customer Form"
+                                    class="btn-primary"
+                                    id="partner_resend_form_button" style="margin-right: 20px;"
+                                    invisible="not is_send_for_partner_kyc or state not in ['draft'] or partner_type not in ['customer', 'both']"/>
                             <button name="supplier_send_form_action" type="object" string="Send Supplier Form"
                                     class="btn-primary"
                                     id="supplier_send_form_button" style="margin-right: 20px;"
                                     invisible="is_send_for_supplier_kyc or partner_type not in ['supplier', 'both']"/>
+                            <button name="supplier_send_form_action" type="object" string="Re Send Supplier Form"
+                                    class="btn-primary"
+                                    id="supplier_resend_form_button" style="margin-right: 20px;"
+                                    invisible="not is_send_for_supplier_kyc or state not in ['draft'] or partner_type not in ['supplier', 'both']"/>
                             <button string="Publish" name="publish_partner" type="object" class="oe_highlight"
                                     invisible="state not in ['waiting_for_approval']"/>
                             <button string="Decline" name="decline_partner" type="object"

@@ -31,7 +31,6 @@ class CustomController(http.Controller):
     @http.route('/customer_form/<string:token>', type='http', auth='public', website=True)
     def customer_form(self, token, **kw):
         partner = request.env['res.partner'].sudo().search([('token', '=', token)])
-        print("**********************", partner)
         if not partner:
             return request.not_found()
 
@@ -62,7 +61,6 @@ class CustomController(http.Controller):
     @http.route('/vendor_form/<string:token>', type='http', auth='public', website=True)
     def vendor_form(self, token, **kw):
         vendor = request.env['res.partner'].sudo().search([('token', '=', token)])
-        print("-----------------------------", vendor)
         if not vendor:
             return request.not_found()
 

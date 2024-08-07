@@ -488,6 +488,10 @@ class PurchaseOrder(models.Model):
         for order in self:
             if order.state not in ['draft', 'sent']:
                 continue
+
+            if order.partner_id.state != 'publish':
+                raise UserError("KYC is not completed for this vendor...")
+
             order.order_line._validate_analytic_distribution()
             order._add_supplier_to_product()
             # Deal with double validation process
