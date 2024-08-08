@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the report template -->
+        <template id="report_invoice_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-family: Arial, sans-serif; margin: 20px;">
+                        <h2 style="text-align: end; font-size: 24px; margin-bottom: 20px;">Your Logo</h2>
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                        <h2 style="text-align: center; font-size: 24px; margin-bottom: 20px;">COMMERCIAL INVOICE</h2>
+
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 18px;">
+                            <span t-field="o.partner_id"/>
+                            <div>
+                                <span>Invoice Date:</span>
+                                <span t-field="o.invoice_date">2023-09-12</span>
+                            </div>
+                        </div>
+
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <table style="font-size: 18px; border-spacing: 0 15px;">
+                                    <tr>
+                                        <td style=" padding-right: 10px;">
+                                            <span>CONTRACT NO.</span>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.contract_no">Con-101</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>ORDER NO.</span>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.invoice_origin">SO123</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div>
+                                <table style="font-size: 18px; border-spacing: 0 15px;">
+                                    <tr>
+                                        <td style=" vertical-align: top; ">
+                                            <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">INVOICE
+                                                NO.
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span t-if="o.name != '/'" t-field="o.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-right: 10px;">
+                                            <span>SUPPLIER NO.</span>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.supplier_no">SUP-101</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-set="lines"
+                           t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+
+                        <t t-foreach="lines" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                            <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
+
+                                <table style="border-spacing: 0 15px; font-size: 18px;">
+                                    <tr>
+                                        <td style="font-weight: 600; vertical-align: top; padding-right: 15px;">
+                                            COMMODITY
+                                            :
+                                        </td>
+                                        <td name="account_invoice_line_name">
+                                            <span t-if="line.product_id.name" t-field="line.product_id.name"
+                                                  t-options="{'widget': 'text'}">SS Solid
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">ITEM/PART # :</td>
+                                        <td/>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">NET WEIGHT :</td>
+                                        <td name="td_quantity" class="text-end">
+                                            <span t-field="line.quantity">1.00</span>
+                                            <span t-field="line.product_uom_id" groups="uom.group_uom">units</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">BOL NUMBER :</td>
+                                        <td>
+                                            <span t-field="line.bol_number">BOL-101</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">PRICE :</td>
+                                        <td>
+                                            <span t-field="line.price_unit">1</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                        <td>
+                                            <!-- Nested Table Start -->
+                                            <table style="font-size: 18px; border-spacing: 0 20px;">
+                                                <tr>
+                                                    <td style="font-weight: 600; padding-right: 40px;">PRICE (US$)/LB
+                                                    </td>
+                                                    <td style="font-weight: 600; padding-right: 40px;">NET WEIGHT</td>
+                                                    <td style="font-weight: 600; padding-right: 40px;">CONVERSION RATE
+                                                    </td>
+                                                    <td style="font-weight: 600; padding-right: 40px;">AMOUNT (US$)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span t-field="line.price_unit">1</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="line.quantity">1.00</span>
+                                                    </td>
+                                                    <td>$2,204.62</td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-set="amount"
+                                                               t-value="line.price_unit * line.quantity * 2204.62"/>
+                                                            <t t-esc="amount"/>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3"
+                                                        style="font-weight: 600; text-align: right; padding-right: 20px;">
+                                                        Total
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="line.price_subtotal" />
+                                                    </td>
+
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                        </t>
+
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+
+                        <div style="font-size: 18px;">
+                            <span>Ni-Met Metals (USA) Inc. HST No.
+                                <span t-field="o.partner_id.gst_hst_number"/>
+                            </span>
+                        </div>
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175);  margin-top: 15px; margin-bottom: 15px;"/>
+
+
+                        <div style="display: flex; font-size: 18px;">
+                            <div style="margin-right: 15px;">
+                                <span style="font-weight: 600;">PAYMENT :</span>
+                            </div>
+                            <div>
+
+                                <div style="margin-bottom: 10px;">NET 60 DAYS BY T/T</div>
+                                <div style="margin-bottom: 10px;">
+                                    <span>OUR BANK:</span>
+                                    <span>RBC Royal Bank of Canada, 2460 Winston Churchill Blvd.</span>
+                                </div>
+
+                                <div style="margin-bottom: 10px;">Oakville, Ontario L6H 6J5</div>
+                                <div style="margin-bottom: 10px;">
+                                    <span>SWIFT CODE:</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <span>OUR A/C:</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
