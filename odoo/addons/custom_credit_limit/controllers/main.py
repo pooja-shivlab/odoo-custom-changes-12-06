@@ -1,5 +1,6 @@
 from odoo import http
 from odoo.http import request
+import json
 
 
 class PartnerOverviewController(http.Controller):
@@ -11,8 +12,17 @@ class PartnerOverviewController(http.Controller):
 
 class CustomNotificationController(http.Controller):
     @http.route('/web/dataset/call_kw/sale.order/get_credit_limit_warnings', type='json', auth='user')
-    def get_credit_limit_warnings(self):
+    def get_credit_limit_warnings(self, **kwargs):
+        raw_data = request.httprequest.get_data(as_text=True)
+
+        # Parse the JSON data
+        try:
+            params = json.loads(raw_data)
+        except json.JSONDecodeError:
+            params = {}
+
+        customer = params.get('customer')
+        type = params.get('type')
         SaleOrder = request.env['sale.order']
-        print("000000000000000000000000", SaleOrder)
-        warnings = SaleOrder.get_credit_limit_warnings()
+        warnings = SaleOrder.get_credit_limit_warnings(type, customer)
         return {'result': warnings}

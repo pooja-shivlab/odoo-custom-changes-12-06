@@ -15,6 +15,7 @@
         'views/customer_details_form_views.xml',
         'views/customer_form.xml',
         'views/vendor_form.xml',
+        'views/token_expiry.xml',
     ],
     'assets': {
         'web.assets_backend': [

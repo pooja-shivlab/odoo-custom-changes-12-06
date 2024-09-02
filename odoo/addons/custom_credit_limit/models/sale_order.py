@@ -65,15 +65,17 @@ class SaleOrder(models.Model):
         return super(SaleOrder, self).action_confirm()
 
     @api.model
-    def get_credit_limit_warnings(self):
-        sale_orders = self.search([
-            ('state', 'in', ['draft', 'sent', 'sale', 'done'])
-        ])
-        unique_warnings = set()  # To keep track of unique messages
+    def get_credit_limit_warnings(self, type, customer):
+        print("type and customer ::::::::::::: ", type, customer)
+        partner = self.env['res.partner'].search([('name', '=', customer)], limit=1)
 
-        for order in sale_orders:
-            order._compute_customer_credit_warning()  # Ensure computed field is updated
-            if order.is_warning:
-                if order.customer_credit_warning not in unique_warnings:
-                    unique_warnings.add(order.customer_credit_warning)
-                    return {'message': order.customer_credit_warning}
+        if not partner:
+            raise UserError(_("Customer not found."))
+
+        receivable_amount = partner.total_receivable_amount
+
+        if receivable_amount > partner.blocking_limit:
+            message = _("The customer is in a blocking stage and has to pay %.2f") % receivable_amount
+            return {'message': message}
+
+        return {'message': ''}

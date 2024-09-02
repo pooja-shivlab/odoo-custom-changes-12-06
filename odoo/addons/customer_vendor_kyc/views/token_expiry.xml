@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_kyc_setup" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.kyc.setup</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='contacts_settings']" position="before">
+                <div id="kyc_interval">
+                    <block title="KYC Reminder &amp; Token Expire" id="kyc_internval_div">
+                        <setting string="KYC Remind Interval"
+                                 title="This will send mail automatically to customer to reminder them to fill up the kyc form."
+                                 name="kyc_reminder_setting_container">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="reminder_interval_number" class="o_light_label mr8"/>
+                                    <field name="reminder_interval_number" class="oe_inline mr8"
+                                           field_id="reminder_interval_number_0"/>
+                                    <field name="reminder_interval_type" class="oe_inline"
+                                           field_id="reminder_interval_type_0"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Token Expire Interval" title="This will automatically expire access token."
+                                 name="token_expire_setting_container">
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="token_expire_interval_number" class="o_light_label mr8"/>
+                                    <field name="token_expire_interval_number" class="oe_inline mr8"
+                                           field_id="token_expire_interval_number_0"/>
+                                    <field name="token_expire_interval_type" class="oe_inline"
+                                           field_id="token_expire_interval_type_0"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

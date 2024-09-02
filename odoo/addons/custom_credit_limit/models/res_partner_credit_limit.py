@@ -16,7 +16,7 @@ class ResPartner(models.Model):
     )
     total_receivable_amount = fields.Monetary(
         compute='_compute_total_receivable_amount',
-        string='Total Receivable',
+        string='Total Receivable',store=True,
         readonly=True,
         currency_field='currency_id'
     )

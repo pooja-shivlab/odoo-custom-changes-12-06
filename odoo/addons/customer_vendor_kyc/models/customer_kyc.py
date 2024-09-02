@@ -2,6 +2,7 @@ from odoo import models, fields, api
 import uuid
 from odoo.http import request
 from odoo.exceptions import UserError
+from datetime import timedelta
 
 
 class ResPartner(models.Model):
@@ -43,7 +44,7 @@ class ResPartner(models.Model):
         ('eur', 'EUR'),
         ('usd', 'USD'),
     ], string='Trade Currency')
-    name = fields.Char(string='Completed By')
+    partner_completed_by = fields.Char(string='Completed By')
     designation = fields.Char(string='Designation')
     digital_sign_date = fields.Date(string='Date')
 
@@ -90,6 +91,103 @@ class ResPartner(models.Model):
     partner_published = fields.Boolean(string='Customer Kyc Done', default=False)
     supplier_published = fields.Boolean(string='Vendor Kyc Done', default=False)
 
+    # KYC reminder and token expiry date-time fields
+    form_submit_datetime = fields.Datetime(
+        string="Form Submit DateTime",
+        readonly=True,
+    )
+    kyc_reminder_datetime = fields.Datetime(
+        string="KYC Reminder DateTime",
+        default=lambda self: self._default_kyc_reminder_datetime(),
+    )
+    token_expiry_datetime = fields.Datetime(
+        string="Token Expiry DateTime",
+        default=lambda self: self._default_token_expiry_datetime(),
+    )
+    def _default_kyc_reminder_datetime(self):
+        # Ensure that the form submit datetime is available
+        if not self.form_submit_datetime:
+            return False
+
+        reminder_interval_number = int(
+            self.env['ir.config_parameter'].sudo().get_param('reminder_interval_number', default=0)
+        )
+        reminder_interval_type = self.env['ir.config_parameter'].sudo().get_param(
+            'reminder_interval_type', default='days'
+        )
+        if reminder_interval_type == 'days':
+            delta = timedelta(days=reminder_interval_number)
+        else:  # hours
+            delta = timedelta(hours=reminder_interval_number)
+
+        return self.form_submit_datetime + delta
+
+    def _default_token_expiry_datetime(self):
+        # Ensure that the form submit datetime is available
+        if not self.form_submit_datetime:
+            return False
+
+        token_expire_interval_number = int(
+            self.env['ir.config_parameter'].sudo().get_param('token_expire_interval_number', default=0)
+        )
+        token_expire_interval_type = self.env['ir.config_parameter'].sudo().get_param(
+            'token_expire_interval_type', default='days'
+        )
+        if token_expire_interval_type == 'days':
+            delta = timedelta(days=token_expire_interval_number)
+        else:  # hours
+            delta = timedelta(hours=token_expire_interval_number)
+
+        return self.form_submit_datetime + delta
+
+    supplier_form_submit_datetime = fields.Datetime(
+        string="Supplier Form Submit DateTime",
+        readonly=True,
+    )
+    supplier_kyc_reminder_datetime = fields.Datetime(
+        string="Supplier KYC Reminder DateTime",
+        default=lambda self: self._default_supplier_kyc_reminder_datetime(),
+    )
+    supplier_token_expiry_datetime = fields.Datetime(
+        string="Supplier Token Expiry DateTime",
+        default=lambda self: self._default_supplier_token_expiry_datetime(),
+    )
+    def _default_supplier_kyc_reminder_datetime(self):
+        # Ensure that the form submit datetime is available
+        if not self.supplier_form_submit_datetime:
+            return False
+
+        reminder_interval_number = int(
+            self.env['ir.config_parameter'].sudo().get_param('reminder_interval_number', default=0)
+        )
+        reminder_interval_type = self.env['ir.config_parameter'].sudo().get_param(
+            'reminder_interval_type', default='days'
+        )
+        if reminder_interval_type == 'days':
+            delta = timedelta(days=reminder_interval_number)
+        else:  # hours
+            delta = timedelta(hours=reminder_interval_number)
+
+        return self.supplier_form_submit_datetime + delta
+
+    def _default_supplier_token_expiry_datetime(self):
+        # Ensure that the form submit datetime is available
+        if not self.supplier_form_submit_datetime:
+            return False
+
+        token_expire_interval_number = int(
+            self.env['ir.config_parameter'].sudo().get_param('token_expire_interval_number', default=0)
+        )
+        token_expire_interval_type = self.env['ir.config_parameter'].sudo().get_param(
+            'token_expire_interval_type', default='days'
+        )
+        if token_expire_interval_type == 'days':
+            delta = timedelta(days=token_expire_interval_number)
+        else:  # hours
+            delta = timedelta(hours=token_expire_interval_number)
+
+        return self.supplier_form_submit_datetime + delta
+
     @api.model
     def default_get(self, fields_list):
         res = super(ResPartner, self).default_get(fields_list)
@@ -99,6 +197,11 @@ class ResPartner(models.Model):
 
     def partner_send_form_action(self):
         for partner in self:
+            partner.form_submit_datetime = fields.Datetime.now()
+            # Recalculate the reminder and expiry datetimes
+            partner.kyc_reminder_datetime = partner._default_kyc_reminder_datetime()
+            partner.token_expiry_datetime = partner._default_token_expiry_datetime()
+
             # Define the URL for the form
             partner.is_send_for_partner_kyc = True
             base_url = '/customer_form/%s' % partner.token
@@ -123,6 +226,11 @@ class ResPartner(models.Model):
 
     def supplier_send_form_action(self):
         for partner in self:
+            partner.supplier_form_submit_datetime = fields.Datetime.now()
+            # Recalculate the reminder and expiry datetimes
+            partner.supplier_kyc_reminder_datetime = partner._default_supplier_kyc_reminder_datetime()
+            partner.supplier_token_expiry_datetime = partner._default_supplier_token_expiry_datetime()
+
             # Define the URL for the form
             # url = '/customer_form/%s' % partner.id
             partner.is_send_for_supplier_kyc = True

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="my_modal_relay">
+        <div class="modal fade" id="my_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 0; border: none;">
+                    <div class="modal-header" style="border-bottom: none;">
+                        <h5 class="modal-title">Oh snap!</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p t-esc="warning">This is the content of the modal.</p>
+                    </div>
+                    <div class="modal-footer" style="border-top: none;">
+                        <button type="button" class="btn btn-secondary" id="stay-here-btn" data-dismiss="modal">Stay here</button>
+                        <button type="button" class="btn btn-danger" id="discard-changes-btn">Discard changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

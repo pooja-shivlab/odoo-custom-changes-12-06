@@ -56,6 +56,10 @@ class CustomController(http.Controller):
             'years_ownership': partner.years_under_current_ownership or '',
             'number_locations': partner.number_of_location or '',
             'fiscal_year_end': partner.fiscal_years_end_date or '',
+            'partner_completed_by': partner.partner_completed_by or '',
+            'digital_sign_date': partner.digital_sign_date or '',
+            'trade_currency': partner.trade_currency or '',
+            'designation': partner.designation or '',
         })
 
     @http.route('/vendor_form/<string:token>', type='http', auth='public', website=True)
@@ -130,6 +134,10 @@ class CustomController(http.Controller):
                 'number_of_location': post.get('number_locations'),
                 'fiscal_years_end_date': post.get('fiscal_year_end'),
                 'email_for_invoice': post.get('preferred_email_for_invoice'),
+                'partner_completed_by': post.get('partner_completed_by'),
+                'designation': post.get('designation'),
+                'digital_sign_date': post.get('digital_sign_date'),
+                'trade_currency': post.get('trade_currency'),
                 'state': 'waiting_for_approval',
                 'partner_kyc_data_filled': True,
             })

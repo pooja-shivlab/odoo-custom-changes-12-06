@@ -25,6 +25,12 @@
                     <field name="supplier_published" invisible="0"/>
                     <field name="partner_kyc_data_filled" string='Customer Data filled' invisible="0"/>
                     <field name="partner_published" invisible="0"/>
+                    <field name="form_submit_datetime" invisible="0"/>
+                    <field name="kyc_reminder_datetime" invisible="0"/>
+                    <field name="token_expiry_datetime" invisible="0"/>
+                    <field name="supplier_form_submit_datetime" invisible="0"/>
+                    <field name="supplier_kyc_reminder_datetime" invisible="0"/>
+                    <field name="supplier_token_expiry_datetime" invisible="0"/>
                 </field>
                 <xpath expr="//sheet" position="before">
                     <div class="alert alert-success text-center o_form_header alert-dismissible"
@@ -101,7 +107,7 @@
                                 <field name="trade_currency"/>
                             </group>
                             <group string="DIGITAL SIGN OFF" name="digital_sign_off">
-                                <field name="name"/>
+                                <field name="partner_completed_by"/>
                                 <field name="designation"/>
                                 <field name="digital_sign_date"/>
                             </group>

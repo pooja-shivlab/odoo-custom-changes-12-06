@@ -375,11 +375,12 @@
                         </div>
                         <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
                             <div class="form-group">
-                                <label for="trading_currency">Trading Currency</label>
-                                <select id="trading_currency" name="trading_currency" style="border-radius: 20px;">
-                                    <option value="GBP">GBP</option>
-                                    <option value="EUR">EUR</option>
-                                    <option value="USD">USD</option>
+                                <label for="trade_currency">Trading Currency</label>
+                                <select id="trade_currency" name="trade_currency" t-att-value="trade_currency"
+                                        style="border-radius: 20px;">
+                                    <option value="gbp">GBP</option>
+                                    <option value="eur">EUR</option>
+                                    <option value="usd">USD</option>
                                 </select>
                             </div>
                         </div>
@@ -426,20 +427,23 @@
                     <div style="display: flex;  justify-content: space-between; gap:10px; padding-top:10px;">
                         <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
                             <div class="form-group">
-                                <label for="completed_by">Completed By</label>
-                                <input type="text" id="completed_by" name="completed_by" style="border-radius: 20px;"/>
+                                <label for="partner_completed_by">Completed By</label>
+                                <input type="text" id="partner_completed_by" name="partner_completed_by"
+                                       t-att-value="partner_completed_by" style="border-radius: 20px;"/>
                             </div>
                         </div>
                         <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
                             <div class="form-group">
                                 <label for="designation">Designation</label>
-                                <input type="text" id="designation" name="designation" style="border-radius: 20px;"/>
+                                <input type="text" id="designation" name="designation"
+                                       t-att-value="designation" style="border-radius: 20px;"/>
                             </div>
                         </div>
                         <div class="group" style="width: 48%; display: flex; flex-direction: column; gap:10px">
                             <div class="form-group">
-                                <label for="signoff_date">Date</label>
-                                <input type="date" id="signoff_date" name="signoff_date" style="border-radius: 20px;"/>
+                                <label for="digital_sign_date">Date</label>
+                                <input type="date" id="digital_sign_date" name="digital_sign_date"
+                                       t-att-value="digital_sign_date" style="border-radius: 20px;"/>
                             </div>
                         </div>
                     </div>
