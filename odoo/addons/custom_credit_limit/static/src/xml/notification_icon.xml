@@ -1,18 +1,22 @@
 <odoo>
     <t t-name="custom_credit_limit.assets">
         <div class="o_notification_icon notification-icon" t-on-click="toggleDropdown">
-            <i class="fa fa-bell dropdown-toggle-button" role="button"></i>
+            <i class="fa fa-bell dropdown-toggle-button" role="button">
+                <t t-if="state.count">
+                    <span class="badge rounded-pill badge-danger" t-esc="state.count"></span>
+                </t>
+            </i>
             <ul class="menu-dropdown" t-att-class="{'show': state.isOpen}">
-                <li class="soft-warning-menu">
+                <li class="soft-warning-menu" style="cursor: pointer;">
                     <i class="fa fa-handshake-o py-2 orange" aria-hidden="true"></i>
                     <a class="dropdown-new-item soft-warning" t-on-click="handleWarningClick.bind(this, 'soft')">Soft
-                        Warning
+                        Warning <span t-esc="`(0)`"/>
                     </a>
                 </li>
-                <li class="hard-warning-menu">
+                <li class="hard-warning-menu" style="cursor: pointer;">
                     <i class="fa fa-handshake-o py-2 red" aria-hidden="true"></i>
                     <a class="dropdown-new-item hard-warning" t-on-click="handleWarningClick.bind(this, 'hard')">Hard
-                        Warning
+                        Warning <span t-if="state.count" t-esc="`(${state.count})`"/>
                     </a>
                 </li>
             </ul>

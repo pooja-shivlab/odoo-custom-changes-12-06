@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_partner_overview_template">  <!-- Change this ID to avoid conflict -->
+            <t t-call="web.html_container">
+                <div class="page" style="font-family: Arial, sans-serif; margin: 20px;">
+                    <h2 style="font-size: 24px; margin-bottom: 20px;">Your Logo</h2>
+                    <hr style="width: 100%; border-color: rgb(156, 163, 175); margin-top: 15px; margin-bottom: 15px;"/>
+
+                    <h2 style="text-align: center; font-size: 24px; margin-bottom: 20px;">Partner Credit Overview</h2>
+                    <table class="border-spacing: 0 15px; font-size: 18px;">
+                        <thead>
+                            <tr>
+                                <th>Partner Name</th>
+                                <th>Credit Limit</th>
+                                <th>Blocking Limit</th>
+                                <th>Used Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="partner">
+                                <td>
+                                    <span t-esc="partner.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="partner.customer_credit_limit"/>
+                                </td>
+                                <td>
+                                    <span t-esc="partner.blocking_limit"/>
+                                </td>
+                                <td>
+                                    <span t-esc="partner.total_receivable_amount"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

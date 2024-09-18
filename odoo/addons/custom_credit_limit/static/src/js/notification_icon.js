@@ -13,7 +13,8 @@ export class CustomNotificationIcon extends Component {
             isOpen: false,
             warning: '',
             type: '',
-            customer: ''
+            customer: '',
+            count : 0,
         });
 
         // Bind the methods
@@ -35,32 +36,9 @@ export class CustomNotificationIcon extends Component {
             $('#my_modal').modal('hide');  // Close the modal
         };
 
-        this.action = useService("action");
-
         this.discardChanges = () => {
             $('#my_modal').modal('hide');  // Close the modal first
-            console.log("Hello, this method is called.");
-
-            const action = {
-                type: 'ir.actions.act_window',
-                name: 'Sales Orders',  // This is just a name for the action, can be anything descriptive.
-                res_model: 'sale.order',
-                view_mode: 'tree',
-                views: [[false, 'tree']],  // Explicitly specify the view mode.
-                context: {  // Ensure no extra context is causing the creation of a new record.
-                    create: false,  // Prevent opening in create mode.
-                },
-                target: 'current',
-            };
-
-            this.action.doAction(action)
-                .then(() => {
-                    console.log("Redirected to Sales Orders list.");
-                    // Trigger any additional logic if needed
-                })
-                .catch(error => {
-                    console.error("Failed to redirect:", error);
-                });
+            this.env.services.action.doAction('custom_credit_limit.partner_overview');
         };
     }
 
@@ -92,6 +70,13 @@ export class CustomNotificationIcon extends Component {
 
             if (data.result && data.result.result.message) {
                 this.state.warning = data.result.result.message;
+                this.state.count = data.result.result.count;
+
+                  if (type === 'soft') {
+                        this.state.count = 0;
+                  } else if (type === 'hard') {
+                        this.state.count =  this.state.count;
+                  }
 
                   if (type === 'soft' || type === 'hard') {
                     // Check if the modal already exists
@@ -112,6 +97,8 @@ export class CustomNotificationIcon extends Component {
                     document.getElementById('stay-here-btn').addEventListener('click', this.stayHere);
                     document.getElementById('discard-changes-btn').addEventListener('click', this.discardChanges);
                     }
+                }else{
+                    this.env.services.action.doAction('custom_credit_limit.partner_overview');
                 }
         } catch (error) {
             console.error('Error fetching warning:', error);

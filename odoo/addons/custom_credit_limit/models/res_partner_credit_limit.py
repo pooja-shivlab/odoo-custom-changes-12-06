@@ -16,7 +16,7 @@ class ResPartner(models.Model):
     )
     total_receivable_amount = fields.Monetary(
         compute='_compute_total_receivable_amount',
-        string='Total Receivable',store=True,
+        string='Total Receivable', store=True,
         readonly=True,
         currency_field='currency_id'
     )
@@ -32,3 +32,6 @@ class ResPartner(models.Model):
                 partner.total_receivable_amount = sum(receivable_orders.mapped('amount_total'))
             else:
                 partner.total_receivable_amount = 0.0
+
+    def print_credit_limits(self):
+        return self.env.ref('custom_credit_limit.nimet_partner_overview').report_action(self)

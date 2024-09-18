@@ -68,6 +68,8 @@ class SaleOrder(models.Model):
     def get_credit_limit_warnings(self, type, customer):
         print("type and customer ::::::::::::: ", type, customer)
         partner = self.env['res.partner'].search([('name', '=', customer)], limit=1)
+        warnings = self.env['res.partner'].search([('total_receivable_amount', '>', 0)])
+        count = len(warnings)
 
         if not partner:
             raise UserError(_("Customer not found."))
@@ -76,6 +78,6 @@ class SaleOrder(models.Model):
 
         if receivable_amount > partner.blocking_limit:
             message = _("The customer is in a blocking stage and has to pay %.2f") % receivable_amount
-            return {'message': message}
+            return {'message': message, 'count': count}
 
-        return {'message': ''}
+        return {'message': '', 'count': count}

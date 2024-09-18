@@ -1,12 +1,38 @@
-<!-- partner_overview.xml -->
 <odoo>
-    <data>
-        <template id="partner_overview" name="Partner Overview">
-            <div>
-                <h1>Partner Overview</h1>
-                <!-- Other content here -->
-                <button class="btn btn-primary" onclick="window.print()">Print</button>
-            </div>
-        </template>
-    </data>
+    <!-- Define the custom tree view for Partner Credit Limits -->
+    <record id="view_partner_credit_limit_tree" model="ir.ui.view">
+        <field name="name">partner.credit.limit.tree</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Partner Credit Limits">
+                <field name="name"/>
+                <field name="customer_credit_limit" string="Credit Limit"/>
+                <field name="blocking_limit"/>
+                <field name="total_receivable_amount" string="Used Limit"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Define the search view for Partner Credit Limits -->
+    <record id="view_partner_credit_limit_search" model="ir.ui.view">
+        <field name="name">partner.credit.limit.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Search Partner Credit Limits">
+                <field name="name" string="Partner Name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Define the action for the view -->
+    <record id="partner_overview" model="ir.actions.act_window">
+        <field name="name">Partner Credit Limits</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_partner_credit_limit_tree"/>
+        <field name="search_view_id" ref="view_partner_credit_limit_search"/>
+        <field name="domain">[('total_receivable_amount', '>', 0)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
 </odoo>
